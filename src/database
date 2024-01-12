@@ -1,0 +1,127 @@
+-- create table customers
+        create table customers (
+        customerID int auto_increment primary key,
+        last_name varchar(255) not null,
+        first_name varchar(255) not null,
+        email varchar(255) unique not null,
+        phone varchar(15),
+        address varchar(255)
+        );
+
+        -- create table orders
+        create table orders (
+        orderID int auto_increment primary key,
+        order_date date not null,
+        total_order decimal(10, 2) not null,
+        product varchar(255) not null,
+        quantity int not null,
+        customerID int not null,
+        foreign key (customerID) references customers(customerID)
+        );
+
+        -- create table students
+        create table students (
+        personID int unique not null,
+        last_name varchar (255) not null,
+        first_name varchar(255) not null,
+        home_address varchar(255),
+        residence_city varchar(255)
+        );
+
+        -- insert customers
+        insert into customers (last_name, first_name, email, phone, address)
+        values
+        ('Anderson', 'Emma', 'emma.anderson@example.com', '1234567890', '123 Oak St'),
+        ('Miller', 'Oliver', 'oliver.miller@example.com', '9876543210', '456 Pine St'),
+        ('Smith', 'Sophia', 'sophia.smith@example.com', '5555555555', '789 Maple St'),
+        ('Johnson', 'Noah', 'noah.johnson@example.com', '6666666666', '101 Birch St'),
+        ('Brown', 'Ava', 'ava.brown@example.com', '1111111111', '789 Elm Ave'),
+        ('Davis', 'Ethan', 'ethan.davis@example.com', '2222222222', '567 Cedar St'),
+        ('Garcia', 'Mia', 'mia.garcia@example.com', '3333333333', '321 Walnut St');
+
+        -- insert orders
+        insert into orders (order_date, total_order, product, quantity, customerID)
+        values
+        ('2023-11-01', round(rand() * 100, 2), 'Widget A', floor(rand() * 10) + 1, 1),
+        ('2023-11-02', round(rand() * 100, 2), 'Widget B', floor(rand() * 10) + 1, 2),
+        ('2023-11-03', round(rand() * 100, 2), 'Widget C', floor(rand() * 10) + 1, 3),
+        ('2023-11-06', round(rand() * 100, 2), 'Widget A', floor(rand() * 10) + 1, 4),
+        ('2023-11-06', round(rand() * 100, 2), 'Widget D', floor(rand() * 10) + 1, 5),
+        ('2023-11-06', round(rand() * 100, 2), 'Widget E', floor(rand() * 10) + 1, 6),
+        ('2023-11-06', round(rand() * 100, 2), 'Widget F', floor(rand() * 10) + 1, 7),
+        ('2023-11-01', round(rand() * 100, 2), 'Widget G', floor(rand() * 10) + 1, 1),
+        ('2023-11-02', round(rand() * 100, 2), 'Widget H', floor(rand() * 10) + 1, 1),
+        ('2023-11-03', round(rand() * 100, 2), 'Widget I', floor(rand() * 10) + 1, 1);
+
+        -- insert students
+        insert into students (personID, last_name, first_name, home_address, residence_city)
+        values
+        (9, 'White', 'Liam', 'Str. Alba Iulia 20', 'Oradea'),
+        (10, 'Martinez', 'Isabella', 'Str. Dorobanti 3', 'Brasov'),
+        (11, 'Jackson', 'James', 'Str. Gheorghe Doja 12', 'Constanta'),
+        (12, 'Clark', 'Grace', 'Str. Vasile Lupu 8', 'Ploiesti');
+
+        -- selects
+        select * from customers;
+        select customerID from customers;
+
+        select * from orders;
+        select product from orders;
+
+        select * from students;
+        select * from students order by last_name, first_name;
+
+        -- deletes
+        delete from customers where last_name = 'Garcia';
+        delete from customers where phone = '2222222222';
+
+        delete from students where last_name = 'Clark';
+        delete from students where residence_city = 'Ploiesti';
+
+        delete from orders where customerID = 7;
+
+        -- updates
+        update customers set last_name = 'Johnson' where first_name = 'Sophia';
+        update customers set phone = '0745678901' where last_name = 'Brown' and first_name = 'Ava';
+
+        update students set residence_city = 'Chisinau' where last_name = 'White' and first_name = 'Liam';
+        update students set last_name = 'Martins' where personID = 10;
+
+        update orders set product = 'Water Cooler' where customerID = 4;
+
+        select *
+        from orders inner join customers
+        on orders.customerID = customers.customerID;
+
+        select customers.last_name, customers.first_name, orders.product , orders.order_date
+        from orders inner join customers
+        on orders.customerID = customers.customerID where orders.order_date='2023-11-06';
+
+        select *
+        from orders left join customers
+        on orders.customerID = customers.customerID;
+
+        select customers.email, customers.phone
+        from orders left join customers
+        on orders.customerID = customers.customerID where orders.order_date='2023-11-06';
+
+        select *
+        from orders right join customers
+        on orders.customerID = customers.customerID;
+
+        select customers.address
+        from orders right join customers
+        on orders.customerID = customers.customerID where orders.product='Widget A';
+
+        select *
+        from orders cross join customers
+        on orders.customerID = customers.customerID;
+
+        select customers.last_name, customers.first_name, customers.phone
+        from orders cross join customers
+        on orders.customerID = customers.customerID where customers.address='321 Walnut St';
+
+        -- drop tables
+        drop table orders;
+        drop table customers;
+        drop table students;
